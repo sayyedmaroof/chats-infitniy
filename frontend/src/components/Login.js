@@ -6,16 +6,62 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  useToast,
   VStack,
 } from '@chakra-ui/react'
+import axios from 'axios'
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [show, setShow] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const toast = useToast()
+  const navigate = useNavigate()
 
-  const submintHandler = pics => {}
+  const submitHandler = async () => {
+    setLoading(true)
+    if (!email || !password) {
+      toast({
+        title: 'Please enter all the fields',
+        status: 'warning',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      })
+      setLoading(false)
+      return
+    }
+
+    try {
+      const { data } = await axios.post('/api/user/login', {
+        email,
+        password,
+      })
+      toast({
+        title: 'User logged in',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      })
+      localStorage.setItem('chatApp-userInfo', JSON.stringify(data))
+      setLoading(false)
+      navigate('/chat')
+    } catch (err) {
+      const errorMessage = err.response.data.error || 'Login Failed'
+      toast({
+        title: errorMessage,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      })
+      setLoading(false)
+    }
+  }
 
   return (
     <VStack spacing="5px">
@@ -51,7 +97,8 @@ const Login = () => {
         width="100%"
         colorScheme="blue"
         style={{ marginTop: 15 }}
-        onClick={submintHandler}>
+        onClick={submitHandler}
+        isLoading={loading}>
         Login
       </Button>
       <Button
