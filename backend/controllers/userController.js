@@ -44,7 +44,7 @@ export const allUsers = async (req, res) => {
       : {}
 
     const users = await User.find(keyword).find({ _id: { $ne: req.user._id } })
-    res.send(users)
+    res.json({ success: true, users })
   } catch (err) {
     res.status(400).json({ success: false, error: err.message })
   }
