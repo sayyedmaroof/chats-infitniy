@@ -56,11 +56,23 @@ const SideDrawer = () => {
           Authorization: `Bearer ${user.token}`,
         },
       }
-      const { data } = await axios.post(
-        `/api/chat`,
-        { userId: '63454e2a27496f202f7b4e6c' },
-        config
-      )
+      // const { data } = await axios.post(
+      //   `http://localhost:5000/api/chat`,
+      //   { userId },
+      //   config
+      // )
+
+      const data = await axios({
+        method: 'post',
+        url: `/api/chat`,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`,
+        },
+        data: {
+          userId,
+        },
+      })
 
       //   if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
       setSelectedChat(data)
