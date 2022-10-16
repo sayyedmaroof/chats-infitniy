@@ -4,8 +4,6 @@ import User from '../models/User.js'
 export const accessChat = async (req, res) => {
   const { userId } = req.body
 
-  console.log(req.body)
-
   if (!userId) {
     console.log('User id param is not sent in the request body')
     return res.sendStatus(400)

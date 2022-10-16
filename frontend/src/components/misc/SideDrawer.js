@@ -50,19 +50,8 @@ const SideDrawer = () => {
 
     try {
       setLoadingChat(true)
-      const config = {
-        headers: {
-          'Content-type': 'application/json',
-          Authorization: `Bearer ${user.token}`,
-        },
-      }
-      // const { data } = await axios.post(
-      //   `http://localhost:5000/api/chat`,
-      //   { userId },
-      //   config
-      // )
 
-      const data = await axios({
+      const { data } = await axios({
         method: 'post',
         url: `/api/chat`,
         headers: {
@@ -74,8 +63,9 @@ const SideDrawer = () => {
         },
       })
 
-      //   if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
-      setSelectedChat(data)
+      if (!chats.find(c => c._id === data.fullChat._id))
+        setChats([data.fullChat, ...chats])
+      setSelectedChat(data.fullChat)
       setLoadingChat(false)
       onClose()
     } catch (error) {
