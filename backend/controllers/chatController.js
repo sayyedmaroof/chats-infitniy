@@ -10,12 +10,9 @@ export const accessChat = async (req, res) => {
   }
 
   try {
-    let isChat = await Chat.find({
+    let isChat = await Chat.findOne({
       isGroupChat: false,
-      $and: [
-        { users: { $elemMatch: { $eq: req.user._id } } },
-        { users: { $elemMatch: { $eq: userId } } },
-      ],
+      users: { $all: [req.user._id, userId] },
     })
       .populate('users')
       .populate('latestMessage')
@@ -25,8 +22,8 @@ export const accessChat = async (req, res) => {
       select: 'name pic email',
     })
 
-    if (isChat.length > 0) {
-      res.status(200).json({ success: true, fullChat: isChat[0] })
+    if (isChat) {
+      res.status(200).json({ success: true, fullChat: isChat })
     } else {
       let chatData = {
         chatName: 'sender',
@@ -74,7 +71,7 @@ export const createGroupChat = async (req, res) => {
       throw new Error('please fill all the fields')
     }
 
-    const users = JSON.parse(req.body.users)
+    const users = req.body.users
     if (users.length < 2) {
       throw new Error('More than two users are required to form a group chat')
     }

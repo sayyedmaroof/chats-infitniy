@@ -94,12 +94,12 @@ const SideDrawer = () => {
 
     try {
       setLoading(true)
-      const confg = {
+      const config = {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
       }
-      const { data } = await axios.get(`/api/user?search=${search}`, confg)
+      const { data } = await axios.get(`/api/user?search=${search}`, config)
 
       setLoading(false)
       setSearchResutl(data.users)
@@ -112,6 +112,7 @@ const SideDrawer = () => {
         isClosable: true,
         position: 'bottom-left',
       })
+      setLoading(false)
     }
   }
 
