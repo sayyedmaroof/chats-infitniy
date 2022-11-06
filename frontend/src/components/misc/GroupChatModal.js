@@ -157,7 +157,7 @@ const GroupChatModal = ({ children }) => {
             </FormControl>
             <FormControl>
               <Input
-                placeholder="Add Usrs..."
+                placeholder="Add Users..."
                 mb={1}
                 onChange={e => handleSearch(e.target.value)}
               />
